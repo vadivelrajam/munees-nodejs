@@ -1,28 +1,24 @@
 const express = require("express");
 const app = express();
 
-//This will only handle GET call to user
-app.get("/user", (req,res)=>{
-    res.send({firstName:"munees", lastName:"ganesan"})
-})
+//order is very important
+app.get("/getUserData", (req, res) => {
+  try {
+    throw new Error("this is test");
+    res.send("data is sent");
+  } catch (err) {
+    res.status(500).send("this is from internal server error");
+  }
+  // Logic of DB call and get user data
+});
 
-app.post("/user", (req,res)=>{
-    res.send("post call");
-})
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    //Log your error
+    res.status(500).send("sorry something wrong");
+  }
+});
 
-app.delete("/user", (req,res)=>{
-    res.send("deleted successfully")
-})
-
-//This will match all the http method API calls to test
-
-app.use("/test", (req,res)=>{
-    res.send("this is from test server")
-})
-
-
-
-
-app.listen(3000, ()=> {
-    console.log("server is listening to 3000");
-})
+app.listen(3000, () => {
+  console.log("The server is listening to 3000");
+});
